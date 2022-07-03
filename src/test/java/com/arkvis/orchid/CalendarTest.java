@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CalendarTest {
 
@@ -44,5 +43,95 @@ class CalendarTest {
         assertNotNull(day1.getMenstruation());
         assertNotNull(day2.getMenstruation());
         assertNotNull(day3.getMenstruation());
+    }
+
+    @Test
+    void should_returnNullDate_when_gettingNextMenstruationDateOnEmptyCalendar() {
+        LocalDate nextMenstruation = new PeriodCalendar().getNextMenstruationDate();
+        assertNull(nextMenstruation);
+    }
+
+    @Test
+    void should_returnCorrectDate_when_gettingNextMenstruationDateOnCalendarWithSingleMenstruation() {
+        LocalDate lastMenstruation = LocalDate.now();
+        PeriodCalendar periodCalendar = new PeriodCalendar();
+        periodCalendar.addMenstruation(lastMenstruation);
+
+        LocalDate expectedDate = lastMenstruation.plusDays(PeriodCalendar.DEFAULT_CYCLE_LENGTH_IN_DAYS);
+        LocalDate nextMenstruation = periodCalendar.getNextMenstruationDate();
+        assertEquals(expectedDate, nextMenstruation);
+    }
+
+    @Test
+    void should_returnCorrectDate_when_gettingNextMenstruationDateOnCalendarWithSingleCycle() {
+        LocalDate firstMenstruation = LocalDate.now();
+        PeriodCalendar periodCalendar = new PeriodCalendar();
+
+        periodCalendar.addMenstruation(firstMenstruation);
+        periodCalendar.addMenstruation(firstMenstruation.plusDays(1));
+        periodCalendar.addMenstruation(firstMenstruation.plusDays(2));
+        periodCalendar.addMenstruation(firstMenstruation.plusDays(3));
+
+        LocalDate expectedDate = firstMenstruation.plusDays(PeriodCalendar.DEFAULT_CYCLE_LENGTH_IN_DAYS);
+        LocalDate nextMenstruation = periodCalendar.getNextMenstruationDate();
+        assertEquals(expectedDate, nextMenstruation);
+    }
+
+    @Test
+    void should_returnCorrectDate_when_gettingNextMenstruationDateOnCalendarWithTwoCycles() {
+        PeriodCalendar periodCalendar = new PeriodCalendar();
+
+        LocalDate firstCycleDate = LocalDate.now();
+        periodCalendar.addMenstruation(firstCycleDate);
+        periodCalendar.addMenstruation(firstCycleDate.plusDays(1));
+        periodCalendar.addMenstruation(firstCycleDate.plusDays(2));
+        periodCalendar.addMenstruation(firstCycleDate.plusDays(3));
+
+        int firstCycleLengthInDay = 30;
+
+        LocalDate secondCycleDate = firstCycleDate.plusDays(firstCycleLengthInDay);
+        periodCalendar.addMenstruation(secondCycleDate);
+        periodCalendar.addMenstruation(secondCycleDate.plusDays(1));
+        periodCalendar.addMenstruation(secondCycleDate.plusDays(2));
+        periodCalendar.addMenstruation(secondCycleDate.plusDays(3));
+
+        long averageCycleLength = (PeriodCalendar.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay) / 2;
+        LocalDate expectedDate = secondCycleDate.plusDays(averageCycleLength);
+        LocalDate nextMenstruation = periodCalendar.getNextMenstruationDate();
+        assertEquals(expectedDate, nextMenstruation);
+    }
+
+    @Test
+    void should_returnCorrectDate_when_gettingNextMenstruationDateOnCalendarWithMultipleCycles() {
+        PeriodCalendar periodCalendar = new PeriodCalendar();
+
+        LocalDate firstCycleDate = LocalDate.now();
+        periodCalendar.addMenstruation(firstCycleDate);
+        periodCalendar.addMenstruation(firstCycleDate.plusDays(1));
+        periodCalendar.addMenstruation(firstCycleDate.plusDays(2));
+        periodCalendar.addMenstruation(firstCycleDate.plusDays(3));
+
+        int firstCycleLengthInDay = 30;
+
+        LocalDate secondCycleDate = firstCycleDate.plusDays(firstCycleLengthInDay);
+        periodCalendar.addMenstruation(secondCycleDate);
+        periodCalendar.addMenstruation(secondCycleDate.plusDays(1));
+        periodCalendar.addMenstruation(secondCycleDate.plusDays(2));
+        periodCalendar.addMenstruation(secondCycleDate.plusDays(3));
+        periodCalendar.addMenstruation(secondCycleDate.plusDays(4));
+        periodCalendar.addMenstruation(secondCycleDate.plusDays(5));
+
+        int secondCycleLengthInDays = 23;
+
+        LocalDate thirdCycleDate = secondCycleDate.plusDays(secondCycleLengthInDays);
+        periodCalendar.addMenstruation(thirdCycleDate);
+        periodCalendar.addMenstruation(thirdCycleDate.plusDays(1));
+        periodCalendar.addMenstruation(thirdCycleDate.plusDays(2));
+        periodCalendar.addMenstruation(thirdCycleDate.plusDays(3));
+
+        long averageCycleLength = (PeriodCalendar.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay + secondCycleLengthInDays) / 3;
+        LocalDate expectedDate = thirdCycleDate.plusDays(averageCycleLength);
+        LocalDate nextMenstruation = periodCalendar.getNextMenstruationDate();
+        assertEquals(expectedDate, nextMenstruation);
     }
 }
