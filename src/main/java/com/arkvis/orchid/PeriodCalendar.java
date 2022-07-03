@@ -41,7 +41,7 @@ public class PeriodCalendar {
         LocalDate endDate = getLastItem(cycleStartDays).getDate();
 
         long totalDays = DAYS.between(startDate, endDate) + DEFAULT_CYCLE_LENGTH_IN_DAYS;
-        return totalDays / (cycleStartDays.size());
+        return totalDays / cycleStartDays.size();
     }
 
     private List<Day> getCycleStartDays() {
