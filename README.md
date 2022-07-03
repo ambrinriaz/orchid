@@ -16,11 +16,26 @@ LocalDate periodDate = LocalDate.now();
 calendar.addPeriod(periodDate);
 ```
 
+Add a period with flow
+
+``` java
+LocalDate periodDate = LocalDate.now();
+calendar.addPeriod(periodDate, Flow.LIGHT);
+```
+
 Get a period
 
 ``` java
 Day day = calendar.getDay(periodDate);
 Period period = day.getPeriod();
+```
+
+Get a period with flow
+
+``` java
+Day day = calendar.getDay(periodDate);
+Period period = day.getPeriod();
+Flow flow = period.getFlow();
 ```
 
 Predict next period

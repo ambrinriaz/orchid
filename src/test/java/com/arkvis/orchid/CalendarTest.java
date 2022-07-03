@@ -149,7 +149,7 @@ class CalendarTest {
     }
 
     @Test
-    void should_returnCorrectFlow_when_PeriodAddedWithLightFlow(){
+    void should_returnCorrectFlow_when_periodAddedWithLightFlow(){
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
         calendar.addPeriod(date, Flow.LIGHT);
@@ -161,7 +161,7 @@ class CalendarTest {
     }
 
     @Test
-    void should_returnCorrectFlow_when_PeriodAddedWithMediumFlow(){
+    void should_returnCorrectFlow_when_periodAddedWithMediumFlow(){
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
         calendar.addPeriod(date, Flow.MEDIUM);
@@ -173,7 +173,7 @@ class CalendarTest {
     }
 
     @Test
-    void should_returnCorrectFlow_when_PeriodAddedWithHeavyFlow(){
+    void should_returnCorrectFlow_when_periodAddedWithHeavyFlow(){
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
         calendar.addPeriod(date, Flow.HEAVY);
@@ -185,7 +185,7 @@ class CalendarTest {
     }
 
     @Test
-    void should_returnCorrectFlow_when_PeriodAddedWithSpottingFlow(){
+    void should_returnCorrectFlow_when_periodAddedWithSpottingFlow(){
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
         calendar.addPeriod(date, Flow.SPOTTING);
