@@ -23,6 +23,11 @@ public class PeriodCalendar {
         dayMap.put(date, day);
     }
 
+    public void addPeriod(LocalDate date, Flow flow) {
+        addPeriod(date);
+        dayMap.get(date).addPeriod(flow);
+    }
+
     public LocalDate getNextPeriodDate() {
         return periodPredictor.predictNextPeriodDate(dayMap.values());
     }

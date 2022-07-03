@@ -134,4 +134,65 @@ class CalendarTest {
         LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
         assertEquals(expectedDate, nextPeriod);
     }
+
+    @Test
+    void should_returnNoFlow_when_periodAddedWithNoFlow(){
+        LocalDate date = LocalDate.now();
+
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period period =   retrievedDay.getPeriod();
+        Flow flow = period.getFlow();
+        assertNull(flow);
+    }
+
+    @Test
+    void should_returnCorrectFlow_when_periodAddedWithLightFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.LIGHT);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(Flow.LIGHT, retrievedPeriod.getFlow());
+    }
+
+    @Test
+    void should_returnCorrectFlow_when_periodAddedWithMediumFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.MEDIUM);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(Flow.MEDIUM, retrievedPeriod.getFlow());
+    }
+
+    @Test
+    void should_returnCorrectFlow_when_periodAddedWithHeavyFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.HEAVY);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(Flow.HEAVY, retrievedPeriod.getFlow());
+    }
+
+    @Test
+    void should_returnCorrectFlow_when_periodAddedWithSpottingFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.SPOTTING);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(Flow.SPOTTING, retrievedPeriod.getFlow());
+    }
 }
