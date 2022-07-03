@@ -14,6 +14,11 @@ public class Day {
         period = new Period();
     }
 
+    void addPeriod(FlowType flowType) {
+        period = new Period();
+        period.setFlowType(flowType);
+    }
+
     public Period getPeriod() {
         return period;
     }

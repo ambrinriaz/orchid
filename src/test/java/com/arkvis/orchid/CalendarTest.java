@@ -134,4 +134,30 @@ class CalendarTest {
         LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
         assertEquals(expectedDate, nextPeriod);
     }
+
+    @Test
+    void should_returnNoFlowTypes_when_noFlowTypesAddedToPeriodCycle(){
+        LocalDate date = LocalDate.now();
+
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period period =   retrievedDay.getPeriod();
+        FlowType flow = period.getFlowType();
+        assertNull(flow);
+    }
+
+    @Test
+    void should_returnFlowTypes_when_flowTypesAddedToPeriodCycle(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, FlowType.LIGHT);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(FlowType.LIGHT, retrievedPeriod.getFlowType());
+
+    }
 }
