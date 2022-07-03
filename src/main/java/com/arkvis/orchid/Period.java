@@ -1,4 +1,4 @@
 package com.arkvis.orchid;
 
-class Menstruation {
+class Period {
 }

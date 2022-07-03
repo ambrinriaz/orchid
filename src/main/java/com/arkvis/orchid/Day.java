@@ -4,18 +4,18 @@ import java.time.LocalDate;
 
 public class Day {
     private final LocalDate date;
-    private Menstruation menstruation;
+    private Period period;
 
     Day(LocalDate date) {
         this.date = date;
     }
 
-    public Menstruation getMenstruation() {
-        return menstruation;
+    void addPeriod() {
+        period = new Period();
     }
 
-    void addMenstruation() {
-        menstruation = new Menstruation();
+    public Period getPeriod() {
+        return period;
     }
 
     LocalDate getDate() {
