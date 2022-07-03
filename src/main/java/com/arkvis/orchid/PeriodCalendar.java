@@ -1,24 +1,29 @@
 package com.arkvis.orchid;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class PeriodCalendar {
+    private final PeriodPredictor periodPredictor;
+    private final SortedMap<LocalDate, Day> dayMap;
 
-    private final Map<LocalDate, Day> dayMap;
-
-    public PeriodCalendar() {
-        dayMap = new HashMap<>();
+    public PeriodCalendar(PeriodPredictor periodPredictor) {
+        this.periodPredictor = periodPredictor;
+        dayMap = new TreeMap<>();
     }
 
     public Day getDay(LocalDate date) {
         return dayMap.getOrDefault(date, new Day(date));
     }
 
-    public void addMenstruation(LocalDate date) {
+    public void addPeriod(LocalDate date) {
         Day day = dayMap.getOrDefault(date, new Day(date));
-        day.addMenstruation();
+        day.addPeriod();
         dayMap.put(date, day);
+    }
+
+    public LocalDate getNextPeriodDate() {
+        return periodPredictor.predictNextPeriodDate(dayMap.values());
     }
 }
