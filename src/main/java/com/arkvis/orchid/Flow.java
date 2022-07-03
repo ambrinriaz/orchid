@@ -1,6 +1,6 @@
 package com.arkvis.orchid;
 
-public enum FlowType {
+public enum Flow {
     LIGHT,
     MEDIUM,
     HEAVY,

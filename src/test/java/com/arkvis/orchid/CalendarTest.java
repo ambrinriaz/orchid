@@ -136,7 +136,7 @@ class CalendarTest {
     }
 
     @Test
-    void should_returnNoFlowTypes_when_noFlowTypesAddedToPeriodCycle(){
+    void should_returnNoFlow_when_periodAddedWithNoFlow(){
         LocalDate date = LocalDate.now();
 
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
@@ -144,20 +144,55 @@ class CalendarTest {
 
         Day retrievedDay  = calendar.getDay(date);
         Period period =   retrievedDay.getPeriod();
-        FlowType flow = period.getFlowType();
+        Flow flow = period.getFlow();
         assertNull(flow);
     }
 
     @Test
-    void should_returnFlowTypes_when_flowTypesAddedToPeriodCycle(){
+    void should_returnCorrectFlow_when_PeriodAddedWithLightFlow(){
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
-        calendar.addPeriod(date, FlowType.LIGHT);
+        calendar.addPeriod(date, Flow.LIGHT);
 
         Day retrievedDay  = calendar.getDay(date);
         Period retrievedPeriod =   retrievedDay.getPeriod();
 
-        assertEquals(FlowType.LIGHT, retrievedPeriod.getFlowType());
+        assertEquals(Flow.LIGHT, retrievedPeriod.getFlow());
+    }
 
+    @Test
+    void should_returnCorrectFlow_when_PeriodAddedWithMediumFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.MEDIUM);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(Flow.MEDIUM, retrievedPeriod.getFlow());
+    }
+
+    @Test
+    void should_returnCorrectFlow_when_PeriodAddedWithHeavyFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.HEAVY);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(Flow.HEAVY, retrievedPeriod.getFlow());
+    }
+
+    @Test
+    void should_returnCorrectFlow_when_PeriodAddedWithSpottingFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.SPOTTING);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(Flow.SPOTTING, retrievedPeriod.getFlow());
     }
 }

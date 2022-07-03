@@ -2,13 +2,13 @@ package com.arkvis.orchid;
 
 class Period {
 
-    private FlowType flowType;
+    private Flow flow;
 
-    public FlowType getFlowType() {
-        return flowType;
+    public Flow getFlow() {
+        return flow;
     }
 
-    public void setFlowType(FlowType flowType) {
-        this.flowType = flowType;
+    public void setFlow(Flow flow) {
+        this.flow = flow;
     }
 }
