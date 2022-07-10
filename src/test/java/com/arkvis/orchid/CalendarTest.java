@@ -3,6 +3,7 @@ package com.arkvis.orchid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,5 +103,50 @@ class CalendarTest {
         Day retrievedDay = periodCalendar.getDay(date);
         Period retrievedPeriod = retrievedDay.getPeriod();
         assertEquals(Flow.SPOTTING, retrievedPeriod.getFlow());
+    }
+
+    @Test
+    void should_returnTemperature_when_temperatureAddedToDay(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+
+        Temperature temperature = new Temperature(new BigDecimal("100"), Metric.FAHRENHEIT);
+        calendar.addTemperature(date, temperature);
+
+        Day retrievedDay = calendar.getDay(date);
+        Temperature retrievedTemp = retrievedDay.getTemperature();
+
+        assertEquals(temperature.getValue(), retrievedTemp.getValue());
+        assertEquals(temperature.getMetric(), retrievedTemp.getMetric());
+    }
+
+    @Test
+    void should_returnNoTemperature_when_noTemperatureAddedToDay(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+
+        Day retrievedDay = calendar.getDay(date);
+        Temperature retrievedTemp = retrievedDay.getTemperature();
+
+        assertNull(retrievedTemp);
+    }
+
+    @Test
+    void should_returnTemperature_when_temperatureAndPeriodAddedToDay(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+
+        Temperature temperature = new Temperature(new BigDecimal("100"), Metric.FAHRENHEIT);
+        calendar.addTemperature(date, temperature);
+        calendar.addPeriod(date, Flow.HEAVY);
+
+
+        Day retrievedDay = calendar.getDay(date);
+        Temperature retrievedTemp = retrievedDay.getTemperature();
+        Period retrievedPeriod = retrievedDay.getPeriod();
+
+        assertEquals(temperature.getValue(), retrievedTemp.getValue());
+        assertEquals(temperature.getMetric(), retrievedTemp.getMetric());
+        assertEquals(Flow.HEAVY, retrievedPeriod.getFlow());
     }
 }
