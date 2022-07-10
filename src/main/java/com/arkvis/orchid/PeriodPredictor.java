@@ -12,7 +12,7 @@ class PeriodPredictor {
 
     static final int DEFAULT_CYCLE_LENGTH_IN_DAYS = 28;
 
-    public LocalDate predictNextPeriodDate(Collection<Day> allDays) {
+    LocalDate predictNextPeriodDate(Collection<Day> allDays) {
         List<Day> cycleStartDays = getCycleStartDays(allDays);
         if (cycleStartDays.isEmpty()) return null;
 
