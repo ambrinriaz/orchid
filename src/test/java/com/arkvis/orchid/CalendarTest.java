@@ -46,93 +46,64 @@ class CalendarTest {
     }
 
     @Test
-    void should_returnNullDate_when_gettingNextPeriodDateOnEmptyCalendar() {
-        LocalDate nextPeriod = new PeriodCalendar(new PeriodPredictor()).getNextPeriodDate();
-        assertNull(nextPeriod);
+    void should_returnNoFlow_when_periodAddedWithNoFlow(){
+        LocalDate date = LocalDate.now();
+
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date);
+
+        Day retrievedDay  = calendar.getDay(date);
+        Period period =   retrievedDay.getPeriod();
+        Flow flow = period.getFlow();
+        assertNull(flow);
     }
 
     @Test
-    void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithSinglePeriod() {
-        LocalDate lastPeriod = LocalDate.now();
-        PeriodCalendar periodCalendar = new PeriodCalendar(new PeriodPredictor());
-        periodCalendar.addPeriod(lastPeriod);
+    void should_returnCorrectFlow_when_periodAddedWithLightFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.LIGHT);
 
-        LocalDate expectedDate = lastPeriod.plusDays(PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS);
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
-        assertEquals(expectedDate, nextPeriod);
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
+
+        assertEquals(Flow.LIGHT, retrievedPeriod.getFlow());
     }
 
     @Test
-    void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithSingleCycle() {
-        LocalDate firstPeriod = LocalDate.now();
-        PeriodCalendar periodCalendar = new PeriodCalendar(new PeriodPredictor());
+    void should_returnCorrectFlow_when_periodAddedWithMediumFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.MEDIUM);
 
-        periodCalendar.addPeriod(firstPeriod);
-        periodCalendar.addPeriod(firstPeriod.plusDays(1));
-        periodCalendar.addPeriod(firstPeriod.plusDays(2));
-        periodCalendar.addPeriod(firstPeriod.plusDays(3));
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
 
-        LocalDate expectedDate = firstPeriod.plusDays(PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS);
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
-        assertEquals(expectedDate, nextPeriod);
+        assertEquals(Flow.MEDIUM, retrievedPeriod.getFlow());
     }
 
     @Test
-    void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithTwoCycles() {
-        PeriodCalendar periodCalendar = new PeriodCalendar(new PeriodPredictor());
+    void should_returnCorrectFlow_when_periodAddedWithHeavyFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.HEAVY);
 
-        LocalDate firstCycleDate = LocalDate.now();
-        periodCalendar.addPeriod(firstCycleDate);
-        periodCalendar.addPeriod(firstCycleDate.plusDays(1));
-        periodCalendar.addPeriod(firstCycleDate.plusDays(2));
-        periodCalendar.addPeriod(firstCycleDate.plusDays(3));
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
 
-        int firstCycleLengthInDay = 30;
-
-        LocalDate secondCycleDate = firstCycleDate.plusDays(firstCycleLengthInDay);
-        periodCalendar.addPeriod(secondCycleDate);
-        periodCalendar.addPeriod(secondCycleDate.plusDays(1));
-        periodCalendar.addPeriod(secondCycleDate.plusDays(2));
-        periodCalendar.addPeriod(secondCycleDate.plusDays(3));
-
-        long averageCycleLength = (PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay) / 2;
-        LocalDate expectedDate = secondCycleDate.plusDays(averageCycleLength);
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
-        assertEquals(expectedDate, nextPeriod);
+        assertEquals(Flow.HEAVY, retrievedPeriod.getFlow());
     }
 
     @Test
-    void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithMultipleCycles() {
-        PeriodCalendar periodCalendar = new PeriodCalendar(new PeriodPredictor());
+    void should_returnCorrectFlow_when_periodAddedWithSpottingFlow(){
+        LocalDate date = LocalDate.now();
+        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        calendar.addPeriod(date, Flow.SPOTTING);
 
-        LocalDate firstCycleDate = LocalDate.now();
-        periodCalendar.addPeriod(firstCycleDate);
-        periodCalendar.addPeriod(firstCycleDate.plusDays(1));
-        periodCalendar.addPeriod(firstCycleDate.plusDays(2));
-        periodCalendar.addPeriod(firstCycleDate.plusDays(3));
+        Day retrievedDay  = calendar.getDay(date);
+        Period retrievedPeriod =   retrievedDay.getPeriod();
 
-        int firstCycleLengthInDay = 30;
-
-        LocalDate secondCycleDate = firstCycleDate.plusDays(firstCycleLengthInDay);
-        periodCalendar.addPeriod(secondCycleDate);
-        periodCalendar.addPeriod(secondCycleDate.plusDays(1));
-        periodCalendar.addPeriod(secondCycleDate.plusDays(2));
-        periodCalendar.addPeriod(secondCycleDate.plusDays(3));
-        periodCalendar.addPeriod(secondCycleDate.plusDays(4));
-        periodCalendar.addPeriod(secondCycleDate.plusDays(5));
-
-        int secondCycleLengthInDays = 23;
-
-        LocalDate thirdCycleDate = secondCycleDate.plusDays(secondCycleLengthInDays);
-        periodCalendar.addPeriod(thirdCycleDate);
-        periodCalendar.addPeriod(thirdCycleDate.plusDays(1));
-        periodCalendar.addPeriod(thirdCycleDate.plusDays(2));
-        periodCalendar.addPeriod(thirdCycleDate.plusDays(3));
-
-        long averageCycleLength = (PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay + secondCycleLengthInDays) / 3;
-        LocalDate expectedDate = thirdCycleDate.plusDays(averageCycleLength);
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
-        assertEquals(expectedDate, nextPeriod);
+        assertEquals(Flow.SPOTTING, retrievedPeriod.getFlow());
     }
 
     @Test
