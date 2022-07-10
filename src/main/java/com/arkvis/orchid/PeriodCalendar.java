@@ -7,9 +7,11 @@ import java.util.TreeMap;
 public class PeriodCalendar {
     private final PeriodPredictor periodPredictor;
     private final SortedMap<LocalDate, Day> dayMap;
+    private final OvulationPredictor ovulationPredictor;
 
-    public PeriodCalendar(PeriodPredictor periodPredictor) {
+    public PeriodCalendar(PeriodPredictor periodPredictor, OvulationPredictor ovulationPredictor) {
         this.periodPredictor = periodPredictor;
+        this.ovulationPredictor = ovulationPredictor;
         dayMap = new TreeMap<>();
     }
 
@@ -30,5 +32,10 @@ public class PeriodCalendar {
 
     public LocalDate getNextPeriodDate() {
         return periodPredictor.predictNextPeriodDate(dayMap.values());
+    }
+
+    public LocalDate getNextOvulationDate() {
+        LocalDate nextPeriodDate = getNextPeriodDate();
+        return ovulationPredictor.predictNextOvulationDate(nextPeriodDate);
     }
 }

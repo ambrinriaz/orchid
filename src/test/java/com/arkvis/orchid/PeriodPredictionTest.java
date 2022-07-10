@@ -1,5 +1,6 @@
 package com.arkvis.orchid;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -9,16 +10,22 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class PeriodPredictionTest {
 
+    private PeriodCalendar periodCalendar;
+
+    @BeforeEach
+    void setUp() {
+        periodCalendar = new PeriodCalendar(new PeriodPredictor(), new OvulationPredictor());
+    }
+
     @Test
     void should_returnNullDate_when_gettingNextPeriodDateOnEmptyCalendar() {
-        LocalDate nextPeriod = new PeriodCalendar(new PeriodPredictor()).getNextPeriodDate();
+        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
         assertNull(nextPeriod);
     }
 
     @Test
     void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithSinglePeriod() {
         LocalDate lastPeriod = LocalDate.now();
-        PeriodCalendar periodCalendar = new PeriodCalendar(new PeriodPredictor());
         periodCalendar.addPeriod(lastPeriod);
 
         LocalDate expectedDate = lastPeriod.plusDays(PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS);
@@ -29,8 +36,6 @@ class PeriodPredictionTest {
     @Test
     void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithSingleCycle() {
         LocalDate firstPeriod = LocalDate.now();
-        PeriodCalendar periodCalendar = new PeriodCalendar(new PeriodPredictor());
-
         periodCalendar.addPeriod(firstPeriod);
         periodCalendar.addPeriod(firstPeriod.plusDays(1));
         periodCalendar.addPeriod(firstPeriod.plusDays(2));
@@ -43,8 +48,6 @@ class PeriodPredictionTest {
 
     @Test
     void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithTwoCycles() {
-        PeriodCalendar periodCalendar = new PeriodCalendar(new PeriodPredictor());
-
         LocalDate firstCycleDate = LocalDate.now();
         periodCalendar.addPeriod(firstCycleDate);
         periodCalendar.addPeriod(firstCycleDate.plusDays(1));
@@ -62,13 +65,12 @@ class PeriodPredictionTest {
         long averageCycleLength = (PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay) / 2;
         LocalDate expectedDate = secondCycleDate.plusDays(averageCycleLength);
         LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
+
         assertEquals(expectedDate, nextPeriod);
     }
 
     @Test
     void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithMultipleCycles() {
-        PeriodCalendar periodCalendar = new PeriodCalendar(new PeriodPredictor());
-
         LocalDate firstCycleDate = LocalDate.now();
         periodCalendar.addPeriod(firstCycleDate);
         periodCalendar.addPeriod(firstCycleDate.plusDays(1));
@@ -96,6 +98,7 @@ class PeriodPredictionTest {
         long averageCycleLength = (PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay + secondCycleLengthInDays) / 3;
         LocalDate expectedDate = thirdCycleDate.plusDays(averageCycleLength);
         LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
+
         assertEquals(expectedDate, nextPeriod);
     }
 }
