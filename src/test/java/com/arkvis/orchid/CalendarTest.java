@@ -112,13 +112,14 @@ class CalendarTest {
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
 
-        Temperature temperature = new Temperature(new BigDecimal(100), Metric.FAHRENHEIT);
+        Temperature temperature = new Temperature(new BigDecimal("100"), Metric.FAHRENHEIT);
         calendar.addTemperature(date, temperature);
 
         Day retrievedDay = calendar.getDay(date);
         Temperature retrievedTemp = retrievedDay.getTemperature();
 
-        assertEquals(temperature, retrievedTemp);
+        assertEquals(temperature.getValue(), retrievedTemp.getValue());
+        assertEquals(temperature.getMetric(), retrievedTemp.getMetric());
     }
 
     @Test
@@ -137,7 +138,7 @@ class CalendarTest {
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
 
-        Temperature temperature = new Temperature(new BigDecimal(100), Metric.FAHRENHEIT);
+        Temperature temperature = new Temperature(new BigDecimal("100"), Metric.FAHRENHEIT);
         calendar.addTemperature(date, temperature);
         calendar.addPeriod(date, Flow.HEAVY);
 
@@ -146,7 +147,8 @@ class CalendarTest {
         Temperature retrievedTemp = retrievedDay.getTemperature();
         Period retrievedPeriod = retrievedDay.getPeriod();
 
-        assertEquals(temperature, retrievedTemp);
+        assertEquals(temperature.getValue(), retrievedTemp.getValue());
+        assertEquals(temperature.getMetric(), retrievedTemp.getMetric());
         assertEquals(Flow.HEAVY, retrievedPeriod.getFlow());
     }
 }
