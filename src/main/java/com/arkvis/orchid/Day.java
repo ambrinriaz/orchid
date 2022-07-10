@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class Day {
     private final LocalDate date;
     private Period period;
+    private Temperature temperature;
 
     Day(LocalDate date) {
         this.date = date;
@@ -25,5 +26,13 @@ public class Day {
 
     LocalDate getDate() {
         return date;
+    }
+
+    void addTemperature(Temperature temperature) {
+        this.temperature = temperature;
+    }
+
+    public Temperature getTemperature() {
+        return temperature;
     }
 }

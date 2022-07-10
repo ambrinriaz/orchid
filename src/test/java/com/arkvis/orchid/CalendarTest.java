@@ -2,6 +2,7 @@ package com.arkvis.orchid;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,63 +108,45 @@ class CalendarTest {
     }
 
     @Test
-    void should_returnNoFlow_when_periodAddedWithNoFlow(){
+    void should_returnTemperature_when_temperatureAddedToDay(){
         LocalDate date = LocalDate.now();
-
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
-        calendar.addPeriod(date);
 
-        Day retrievedDay  = calendar.getDay(date);
-        Period period =   retrievedDay.getPeriod();
-        Flow flow = period.getFlow();
-        assertNull(flow);
+        Temperature temperature = new Temperature(new BigDecimal(100), Metric.FAHRENHEIT);
+        calendar.addTemperature(date, temperature);
+
+        Day retrievedDay = calendar.getDay(date);
+        Temperature retrievedTemp = retrievedDay.getTemperature();
+
+        assertEquals(temperature, retrievedTemp);
     }
 
     @Test
-    void should_returnCorrectFlow_when_periodAddedWithLightFlow(){
+    void should_returnNoTemperature_when_noTemperatureAddedToDay(){
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
-        calendar.addPeriod(date, Flow.LIGHT);
 
-        Day retrievedDay  = calendar.getDay(date);
-        Period retrievedPeriod =   retrievedDay.getPeriod();
+        Day retrievedDay = calendar.getDay(date);
+        Temperature retrievedTemp = retrievedDay.getTemperature();
 
-        assertEquals(Flow.LIGHT, retrievedPeriod.getFlow());
+        assertNull(retrievedTemp);
     }
 
     @Test
-    void should_returnCorrectFlow_when_periodAddedWithMediumFlow(){
+    void should_returnTemperature_when_temperatureAndPeriodAddedToDay(){
         LocalDate date = LocalDate.now();
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
-        calendar.addPeriod(date, Flow.MEDIUM);
 
-        Day retrievedDay  = calendar.getDay(date);
-        Period retrievedPeriod =   retrievedDay.getPeriod();
-
-        assertEquals(Flow.MEDIUM, retrievedPeriod.getFlow());
-    }
-
-    @Test
-    void should_returnCorrectFlow_when_periodAddedWithHeavyFlow(){
-        LocalDate date = LocalDate.now();
-        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        Temperature temperature = new Temperature(new BigDecimal(100), Metric.FAHRENHEIT);
+        calendar.addTemperature(date, temperature);
         calendar.addPeriod(date, Flow.HEAVY);
 
-        Day retrievedDay  = calendar.getDay(date);
-        Period retrievedPeriod =   retrievedDay.getPeriod();
 
+        Day retrievedDay = calendar.getDay(date);
+        Temperature retrievedTemp = retrievedDay.getTemperature();
+        Period retrievedPeriod = retrievedDay.getPeriod();
+
+        assertEquals(temperature, retrievedTemp);
         assertEquals(Flow.HEAVY, retrievedPeriod.getFlow());
-    }
-
-    @Test
-    void should_returnCorrectFlow_when_periodAddedWithSpottingFlow(){
-        LocalDate date = LocalDate.now();
-        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
-        calendar.addPeriod(date, Flow.SPOTTING);
-
-        Day retrievedDay  = calendar.getDay(date);
-        Period retrievedPeriod =   retrievedDay.getPeriod();
-
-        assertEquals(Flow.SPOTTING, retrievedPeriod.getFlow());
     }
 }
