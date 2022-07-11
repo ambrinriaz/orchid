@@ -43,3 +43,18 @@ Predict next period
 ``` java
 LocalDate nextPeriodDate = calendar.getNextPeriodDate();
 ```
+
+Predict next ovulation date
+
+``` java
+LocalDate nextOvulationDate = calengar.getNextOvulationDate();
+```
+
+Add temperature
+
+``` java
+Temperature temperature = new Temperature(new BigDecimal("98.6"), Metric.FAHRENHEIT);
+calendar.addTemperature(date, temperature);
+
+Temperature retrievedTemperature = calendar.getDay(date).getTemperature();
+```

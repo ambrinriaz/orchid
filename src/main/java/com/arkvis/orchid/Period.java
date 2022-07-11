@@ -8,7 +8,7 @@ class Period {
         return flow;
     }
 
-    public void setFlow(Flow flow) {
+    void setFlow(Flow flow) {
         this.flow = flow;
     }
 }
