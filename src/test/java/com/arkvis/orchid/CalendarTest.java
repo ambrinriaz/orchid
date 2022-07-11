@@ -108,12 +108,10 @@ class CalendarTest {
     @Test
     void should_returnTemperature_when_temperatureAddedToDay(){
         LocalDate date = LocalDate.now();
-        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
-
         Temperature temperature = new Temperature(new BigDecimal("100"), Metric.FAHRENHEIT);
-        calendar.addTemperature(date, temperature);
+        periodCalendar.addTemperature(date, temperature);
 
-        Day retrievedDay = calendar.getDay(date);
+        Day retrievedDay = periodCalendar.getDay(date);
         Temperature retrievedTemp = retrievedDay.getTemperature();
 
         assertEquals(temperature.getValue(), retrievedTemp.getValue());
@@ -123,25 +121,22 @@ class CalendarTest {
     @Test
     void should_returnNoTemperature_when_noTemperatureAddedToDay(){
         LocalDate date = LocalDate.now();
-        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
+        Day retrievedDay = periodCalendar.getDay(date);
 
-        Day retrievedDay = calendar.getDay(date);
         Temperature retrievedTemp = retrievedDay.getTemperature();
-
         assertNull(retrievedTemp);
     }
 
     @Test
     void should_returnTemperature_when_temperatureAndPeriodAddedToDay(){
         LocalDate date = LocalDate.now();
-        PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor());
-
         Temperature temperature = new Temperature(new BigDecimal("100"), Metric.FAHRENHEIT);
-        calendar.addTemperature(date, temperature);
-        calendar.addPeriod(date, Flow.HEAVY);
+
+        periodCalendar.addTemperature(date, temperature);
+        periodCalendar.addPeriod(date, Flow.HEAVY);
 
 
-        Day retrievedDay = calendar.getDay(date);
+        Day retrievedDay = periodCalendar.getDay(date);
         Temperature retrievedTemp = retrievedDay.getTemperature();
         Period retrievedPeriod = retrievedDay.getPeriod();
 
