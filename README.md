@@ -38,10 +38,14 @@ Period period = day.getPeriod();
 Flow flow = period.getFlow();
 ```
 
-Predict next period
+Predict next period window
 
 ``` java
-LocalDate nextPeriodDate = calendar.getNextPeriodDate();
+PeriodWindow periodWindow = periodCalendar.getNextPeriodWindow();
+boolean isEmpty = periodWindow.isEmpty();
+
+LocalDate startDate = periodWindow.getStartDate();
+List<LocalDate> dates = periodWindow.getDates();
 ```
 
 Predict next ovulation date

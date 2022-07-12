@@ -4,9 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PeriodPredictionTest {
 
@@ -18,36 +19,40 @@ class PeriodPredictionTest {
     }
 
     @Test
-    void should_returnNullDate_when_gettingNextPeriodDateOnEmptyCalendar() {
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
-        assertNull(nextPeriod);
+    void should_returnEmptyPeriodWindow_when_gettingNextPeriodWindowOnEmptyCalendar() {
+        PeriodWindow periodWindow = periodCalendar.getNextPeriodWindow();
+        assertTrue(periodWindow.isEmpty());
     }
 
     @Test
-    void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithSinglePeriod() {
+    void should_returnCorrectPeriodWindow_when_gettingNextPeriodWindowOnCalendarWithSinglePeriod() {
         LocalDate lastPeriod = LocalDate.now();
         periodCalendar.addPeriod(lastPeriod);
 
         LocalDate expectedDate = lastPeriod.plusDays(PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS);
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
-        assertEquals(expectedDate, nextPeriod);
+        List<LocalDate> dates = periodCalendar.getNextPeriodWindow().getDates();
+
+        assertEquals(1, dates.size());
+        assertCorrectDates(expectedDate, dates);
     }
 
     @Test
-    void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithSingleCycle() {
+    void should_returnCorrectPeriodWindow_when_gettingNextPeriodWindowOnCalendarWithSingleCycle() {
         LocalDate firstPeriod = LocalDate.now();
         periodCalendar.addPeriod(firstPeriod);
         periodCalendar.addPeriod(firstPeriod.plusDays(1));
         periodCalendar.addPeriod(firstPeriod.plusDays(2));
         periodCalendar.addPeriod(firstPeriod.plusDays(3));
 
-        LocalDate expectedDate = firstPeriod.plusDays(PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS);
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
-        assertEquals(expectedDate, nextPeriod);
+        List<LocalDate> dates = periodCalendar.getNextPeriodWindow().getDates();
+        assertEquals(4, dates.size());
+
+        LocalDate firstExpectedDate = firstPeriod.plusDays(PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS);
+        assertCorrectDates(firstExpectedDate, dates);
     }
 
     @Test
-    void should_returnCorrectDate_when_gettingNextPeriodDateOnCalendarWithTwoCycles() {
+    void should_returnCorrectPeriodWindow_when_gettingNextPeriodPeriodWindowOnCalendarWithTwoCycles() {
         LocalDate firstCycleDate = LocalDate.now();
         periodCalendar.addPeriod(firstCycleDate);
         periodCalendar.addPeriod(firstCycleDate.plusDays(1));
@@ -61,12 +66,15 @@ class PeriodPredictionTest {
         periodCalendar.addPeriod(secondCycleDate.plusDays(1));
         periodCalendar.addPeriod(secondCycleDate.plusDays(2));
         periodCalendar.addPeriod(secondCycleDate.plusDays(3));
+        periodCalendar.addPeriod(secondCycleDate.plusDays(4));
+        periodCalendar.addPeriod(secondCycleDate.plusDays(5));
+
+        List<LocalDate> dates = periodCalendar.getNextPeriodWindow().getDates();
+        assertEquals(5, dates.size());
 
         long averageCycleLength = (PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay) / 2;
-        LocalDate expectedDate = secondCycleDate.plusDays(averageCycleLength);
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
-
-        assertEquals(expectedDate, nextPeriod);
+        LocalDate firstExpectedDate = secondCycleDate.plusDays(averageCycleLength);
+        assertCorrectDates(firstExpectedDate, dates);
     }
 
     @Test
@@ -95,10 +103,17 @@ class PeriodPredictionTest {
         periodCalendar.addPeriod(thirdCycleDate.plusDays(2));
         periodCalendar.addPeriod(thirdCycleDate.plusDays(3));
 
-        long averageCycleLength = (PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay + secondCycleLengthInDays) / 3;
-        LocalDate expectedDate = thirdCycleDate.plusDays(averageCycleLength);
-        LocalDate nextPeriod = periodCalendar.getNextPeriodDate();
+        List<LocalDate> dates = periodCalendar.getNextPeriodWindow().getDates();
+        assertEquals(4, dates.size());
 
-        assertEquals(expectedDate, nextPeriod);
+        long averageCycleLength = (PeriodPredictor.DEFAULT_CYCLE_LENGTH_IN_DAYS + firstCycleLengthInDay + secondCycleLengthInDays) / 3;
+        LocalDate firstExpectedDate = thirdCycleDate.plusDays(averageCycleLength);
+        assertCorrectDates(firstExpectedDate, dates);
+    }
+
+    private void assertCorrectDates(LocalDate firstDate, List<LocalDate> dates) {
+        for (int i = 0; i < dates.size(); i++) {
+            assertEquals(firstDate.plusDays(i), dates.get(i));
+        }
     }
 }
