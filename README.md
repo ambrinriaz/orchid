@@ -41,17 +41,19 @@ Flow flow = period.getFlow();
 Predict next period window
 
 ``` java
-PeriodWindow periodWindow = periodCalendar.getNextPeriodWindow();
+PeriodWindow periodWindow = calendar.getNextPeriodWindow();
 boolean isEmpty = periodWindow.isEmpty();
 
 LocalDate startDate = periodWindow.getStartDate();
 List<LocalDate> dates = periodWindow.getDates();
 ```
 
-Predict next ovulation date
+Predict next fertility window
 
 ``` java
-LocalDate nextOvulationDate = calengar.getNextOvulationDate();
+FertilityWindow fertilityWindow = calendar.getNextFertilityWindow();
+List<LocalDate> nextFertilityWindow = fertilityWindow.getFertilityWindow();
+LocalDate OvulationDate = fertilityWindow.getOvulationDate();
 ```
 
 Add temperature
