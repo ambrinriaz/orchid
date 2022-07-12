@@ -1,10 +1,7 @@
 package com.arkvis.orchid;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -12,7 +9,40 @@ class PeriodPredictor {
 
     static final int DEFAULT_CYCLE_LENGTH_IN_DAYS = 28;
 
-    LocalDate predictNextPeriodDate(Collection<Day> allDays) {
+    PeriodWindow predictNextPeriodWindow(Collection<Day> allDays) {
+        LocalDate periodStartDate = getNextPeriodStartDate(allDays);
+        if (Objects.isNull(periodStartDate)) {
+            return new PeriodWindow(Collections.emptyList());
+        }
+
+        List<LocalDate> dates = new ArrayList<>();
+        dates.add(periodStartDate);
+
+        int averagePeriodLength = getAveragePeriodLength(allDays);
+        for (int i = 1; i < averagePeriodLength; i++) {
+            dates.add(periodStartDate.plusDays(i));
+        }
+        return new PeriodWindow(dates);
+    }
+
+    private int getAveragePeriodLength(Collection<Day> allDays) {
+        List<Day> cycleStartDays = getCycleStartDays(allDays);
+        if (cycleStartDays.isEmpty()) return 0;
+
+        int totalPeriodDays = 0;
+
+        for (Day day : allDays) {
+            if (Objects.nonNull(day.getPeriod())) {
+                totalPeriodDays++;
+            }
+        }
+
+        int totalNumOfPeriods = cycleStartDays.size();
+        return totalPeriodDays / totalNumOfPeriods;
+
+    }
+
+    private LocalDate getNextPeriodStartDate(Collection<Day> allDays) {
         List<Day> cycleStartDays = getCycleStartDays(allDays);
         if (cycleStartDays.isEmpty()) return null;
 

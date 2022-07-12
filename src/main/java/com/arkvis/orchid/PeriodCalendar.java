@@ -30,18 +30,18 @@ public class PeriodCalendar {
         dayMap.get(date).addPeriod(flow);
     }
 
-    public void addTemperature(LocalDate date, Temperature temperature){
+    public void addTemperature(LocalDate date, Temperature temperature) {
         Day day = dayMap.getOrDefault(date, new Day(date));
         day.addTemperature(temperature);
         dayMap.put(date, day);
     }
 
-    public LocalDate getNextPeriodDate() {
-        return periodPredictor.predictNextPeriodDate(dayMap.values());
+    public PeriodWindow getNextPeriodWindow() {
+        return periodPredictor.predictNextPeriodWindow(dayMap.values());
     }
 
     public LocalDate getNextOvulationDate() {
-        LocalDate nextPeriodDate = getNextPeriodDate();
-        return ovulationPredictor.predictNextOvulationDate(nextPeriodDate);
+        PeriodWindow periodWindow = getNextPeriodWindow();
+        return ovulationPredictor.predictNextOvulationDate(periodWindow);
     }
 }

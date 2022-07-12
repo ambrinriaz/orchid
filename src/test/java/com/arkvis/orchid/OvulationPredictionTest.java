@@ -20,7 +20,7 @@ class OvulationPredictionTest {
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor(), new OvulationPredictor());
         calendar.addPeriod(LocalDate.now());
 
-        LocalDate nextPeriodDate = calendar.getNextPeriodDate();
+        LocalDate nextPeriodDate = calendar.getNextPeriodWindow().getStartDate();
         LocalDate nextOvulationDate = calendar.getNextOvulationDate();
         assertEquals(nextPeriodDate.minusDays(OvulationPredictor.DEFAULT_DAYS_BEFORE_PERIOD), nextOvulationDate);
     }
