@@ -40,8 +40,7 @@ public class PeriodCalendar {
         return periodPredictor.predictNextPeriodWindow(dayMap.values());
     }
 
-    public LocalDate getNextOvulationDate() {
-        PeriodWindow periodWindow = getNextPeriodWindow();
-        return ovulationPredictor.predictNextOvulationDate(periodWindow);
+    public FertilityWindow getNextFertilityWindow() {
+        return ovulationPredictor.predictNextFertilityWindow(getNextPeriodWindow());
     }
 }
