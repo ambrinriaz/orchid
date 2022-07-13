@@ -1,5 +1,5 @@
 # Orchid
-### 100% offline women's health app
+### 100% offline period tracker. You own the data. It can't ever be sold, shared, or divulged because it never leaves your device.
 
 ### Usage
 
