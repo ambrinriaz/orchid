@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class OvulationPredictionTest {
 
@@ -27,15 +26,14 @@ class OvulationPredictionTest {
 
         FertilityWindow nextFertilityWindow = calendar.getNextFertilityWindow();
 
-        assertEquals(ovulationWindow, nextFertilityWindow.getFertilityWindow());
+        assertEquals(ovulationWindow, nextFertilityWindow.getDates());
         assertEquals(nextOvulationDate, nextFertilityWindow.getOvulationDate());
     }
 
     @Test
-    void should_returnNullDate_when_gettingNextFertilityWindowOnEmptyCalendar() {
+    void should_returnEmptyFertilityWindow_when_gettingNextFertilityWindowOnEmptyCalendar() {
         PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor(), new OvulationPredictor());
         FertilityWindow fertilityWindow = calendar.getNextFertilityWindow();
-
-        assertNull(fertilityWindow);
+        assertTrue(fertilityWindow.isEmpty());
     }
 }

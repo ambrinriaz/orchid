@@ -53,7 +53,7 @@ Predict next fertility window
 ``` java
 FertilityWindow fertilityWindow = calendar.getNextFertilityWindow();
 List<LocalDate> nextFertilityWindow = fertilityWindow.getFertilityWindow();
-LocalDate OvulationDate = fertilityWindow.getOvulationDate();
+LocalDate ovulationDate = fertilityWindow.getOvulationDate();
 ```
 
 Add temperature

@@ -41,7 +41,6 @@ public class PeriodCalendar {
     }
 
     public FertilityWindow getNextFertilityWindow() {
-        LocalDate nextPeriodDate = getNextPeriodWindow().getStartDate();
-        return ovulationPredictor.predictNextFertilityWindow(nextPeriodDate);
+        return ovulationPredictor.predictNextFertilityWindow(getNextPeriodWindow());
     }
 }
