@@ -6,7 +6,7 @@
 Create a calendar
 
 ``` java
-PeriodCalendar calendar =  new PeriodCalendar(new PeriodPredictor(), new OvulationPredictor());
+PeriodCalendar calendar = new PeriodCalendar(new PeriodPredictor(), new OvulationPredictor());
 ```
 
 Add a period
